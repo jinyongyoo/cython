@@ -1760,6 +1760,7 @@ class EndToEndTest(unittest.TestCase):
     def runTest(self):
         self.success = False
         commands = (self.commands
+            .replace("CYTHONIZE", "PYTHON %s" % os.path.join(self.cython_root, 'cythonize.py'))
             .replace("CYTHON", "PYTHON %s" % os.path.join(self.cython_root, 'cython.py'))
             .replace("PYTHON", sys.executable))
         old_path = os.environ.get('PYTHONPATH')
@@ -2011,6 +2012,10 @@ def flush_and_terminate(status):
 def main():
 
     global DISTDIR, WITH_CYTHON
+
+    # Set an environment variable to the top directory
+    os.environ['CYTHON_PROJECT_DIR'] = os.path.abspath(os.path.dirname(__file__))
+
     DISTDIR = os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]))
 
     from Cython.Compiler import DebugFlags
